@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const adminRoutes = require('./src/routes/adminRoutes.js');
+const puzzleRoutes = require('./src/routes/puzzleRoutes.js');
 const sequelize = require('./src/config/DB.js');
 
 dotenv.config({
@@ -22,7 +23,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/admin', adminRoutes);
-
+app.use('/api/puzzles', puzzleRoutes);
 
 const startServer = async () => {
     try {
