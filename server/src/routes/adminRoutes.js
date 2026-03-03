@@ -11,14 +11,6 @@ router.get('/me', auth, (req, res) => {
     });
 });
 
-//Login Route
-// router.get('/signin', (req, res) => {
-//     res.status(200).json({
-//         message: "Admin Sign In"
-//     });
-
-// })
-
 router.post('/signin', loginAdmin)
 
 module.exports = router;

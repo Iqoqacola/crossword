@@ -1,31 +1,5 @@
-const Admin = require('../models/adminModels');
 const Puzzle = require('../models/puzzleModels');
-
-// Create New Puzzle (Admin only)
-const createPuzzle = async (req, res) => {
-    const { title, words_data, grid_data } = req.body;
-
-    try {
-        const newPuzzle = await Puzzle.create({
-            title,
-            words_data,
-            grid_data
-        });
-
-        res.status(201).json({
-            success: true,
-            message: "Puzzle created successfully",
-            data: newPuzzle
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Failed to create puzzle",
-            data: null,
-            error: error.message
-        });
-    }
-};
+const { generateCrossword } = require('../utils/ttsGenerator');
 
 // Get All Puzzles (Public)
 const getAllPuzzles = async (req, res) => {
@@ -80,14 +54,14 @@ const getPuzzleById = async (req, res) => {
     }
 };
 
-// Preview crossword generation
+// Preview crossword generation (Admin only)
 const generatePreview = (req, res) => {
     const { words_data } = req.body;
 
     if (!words_data || !Array.isArray(words_data) || words_data.length < 5) {
         return res.status(400).json({
             success: false,
-            message: "Sediakan minimal 5 kata untuk di-generate",
+            message: "Provide at least 5 words to generate a crossword preview",
             data: null
         });
     }
@@ -101,6 +75,7 @@ const generatePreview = (req, res) => {
             data: result
         });
     } catch (error) {
+
         res.status(500).json({
             success: false,
             message: "Error generating crossword",
@@ -110,9 +85,35 @@ const generatePreview = (req, res) => {
     }
 };
 
+// Create New Puzzle (Admin only)
+const createPuzzle = async (req, res) => {
+    const { title, words_data, grid_data } = req.body;
+
+    try {
+        const newPuzzle = await Puzzle.create({
+            title,
+            words_data,
+            grid_data
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Puzzle created successfully",
+            data: newPuzzle
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to create puzzle",
+            data: null,
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
-    createPuzzle,
     getAllPuzzles,
     getPuzzleById,
-    generatePreview
+    generatePreview,
+    createPuzzle
 };
