@@ -4,6 +4,7 @@ import Player from "./pages/Player";
 
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminCreate from "./pages/AdminCreate";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         {/* Admin */}
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/create" element={<AdminCreate />} />
       </Routes>
     </Router>
   );

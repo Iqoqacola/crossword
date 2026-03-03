@@ -1,5 +1,5 @@
 const Puzzle = require('../models/puzzleModels');
-const { generateCrossword } = require('../utils/ttsGenerator');
+const { generateCrossword } = require('../utils/crosswordGenerator');
 
 // Get All Puzzles (Public)
 const getAllPuzzles = async (req, res) => {

@@ -79,7 +79,7 @@ const Player = () => {
       <main className="flex-grow max-w-7xl w-full mx-auto px-4 py-6 md:py-8 flex flex-col lg:flex-row gap-6 md:gap-8">
         {/* Grid TTS */}
         <div className="w-full lg:w-2/3 bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
-          <div className="w-full overflow-x-auto pb-4 custom-scrollbar">
+          <div className="w-full flex flex-1 justify-center items-center overflow-x-auto pb-4 custom-scrollbar">
             <div className="w-max mx-auto px-2">
               <CrosswordGrid
                 gridData={puzzle.grid_data}
