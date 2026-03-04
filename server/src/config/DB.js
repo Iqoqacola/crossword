@@ -1,5 +1,11 @@
 const Sequelize = require('sequelize');
-require('dotenv').config({ path: './.env.dev' });
+const dotenv = require('dotenv');
+
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config({ path: './.env.dev' });
+} else {
+    dotenv.config();
+}
 
 const DB_NAME = process.env.DB_NAME;
 const DB_USER = process.env.DB_USER;

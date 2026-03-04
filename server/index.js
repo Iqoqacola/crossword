@@ -5,9 +5,11 @@ const adminRoutes = require('./src/routes/adminRoutes.js');
 const puzzleRoutes = require('./src/routes/puzzleRoutes.js');
 const sequelize = require('./src/config/DB.js');
 
-dotenv.config({
-    path: './.env.dev'
-});
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config({ path: './.env.dev' });
+} else {
+    dotenv.config(); // Default
+}
 
 const app = express();
 const port = process.env.PORT || 5000;
