@@ -42,6 +42,7 @@ services:
     restart: always
     ports:
       - "5173:5173"
+    command: npm run dev
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -49,6 +50,5 @@ services:
       - VITE_API_URL=http://localhost:3000/api
     depends_on:
       - server
-
 volumes:
   db_data:
