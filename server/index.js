@@ -31,14 +31,13 @@ const startServer = async () => {
     try {
         await sequelize.authenticate();
         console.log('Database connected...');
-
-        app.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
-        });
-
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
+
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
 };
 
 startServer();
