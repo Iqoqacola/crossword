@@ -1,4 +1,4 @@
-DROP DATABASE crossword;
+DROP DATABASE IF EXISTS crossword;
 
 CREATE DATABASE crossword;
 -- CREATE DATABASE IF NOT EXISTS crossword;
