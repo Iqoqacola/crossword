@@ -39,6 +39,13 @@ Berdasarkan arsitektur _Fullstack_, proyek ini dibangun menggunakan:
    - URL unik/ID untuk setiap puzzle yang di-_publish_.
    - Halaman daftar puzzle yang tersedia untuk dimainkan umum.
 
+## 🔐 Informasi Login Admin (Demo)
+
+Untuk mengakses panel Admin/Creator, gunakan kredensial berikut:
+
+- **Username:** tester
+- **Password:** tester123
+
 ## ✨ Fitur Tambahan
 
 - **Sistem Autentikasi Admin:** Menggunakan JWT dan Bcrypt untuk mengamankan panel Creator.
