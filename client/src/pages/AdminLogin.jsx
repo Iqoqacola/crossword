@@ -46,9 +46,6 @@ const AdminLogin = () => {
           <h1 className="text-2xl font-extrabold text-slate-800">
             Admin Login
           </h1>
-          <p className="text-slate-500 mt-2 text-sm">
-            Masuk untuk membuat teka-teki silang baru
-          </p>
         </div>
 
         {error && (

@@ -1,133 +1,138 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
+import Navbar from "../components/Navbar";
 
 const AdminDashboard = () => {
+  const [puzzles, setPuzzles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [crosswords, setCrosswords] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/admin");
-      return;
-    }
-    fetchCrosswords();
-  }, [navigate]);
+    fetchPuzzles();
+  }, []);
 
-  const fetchCrosswords = async () => {
+  const fetchPuzzles = async () => {
     try {
       const response = await api.get("/puzzles");
       if (response.data.success) {
-        setCrosswords(response.data.data || []);
+        setPuzzles(response.data.data);
       }
-    } catch (err) {
-      console.error("Gagal mengambil data crossword", err);
+    } catch (error) {
+      if (error.response?.status === 401) navigate("/admin");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/admin");
-  };
-
   return (
-    <div className="min-h-screen bg-slate-50 font-sans pb-20">
-      {/* Header */}
-      <nav className="bg-white border-b border-slate-200 px-6 lg:px-8 py-4 flex justify-between items-center sticky top-0 z-20 shadow-sm">
-        <h1 className="text-xl font-extrabold text-slate-800">
-          Admin <span className="text-blue-600">Creator</span>
-        </h1>
-        <button
-          onClick={handleLogout}
-          className="text-sm font-bold text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg transition-all"
-        >
-          Logout
-        </button>
-      </nav>
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
+      <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-end mb-8">
+          <div>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+              Koleksi Puzzle
+            </h1>
+            <p className="text-slate-500 mt-2 text-lg">
+              {puzzles.length} teka-teki yang sudah dibuat.
+            </p>
+          </div>
+          <Link to="/admin/create">
+            <button className="hidden sm:flex bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-1 active:scale-95 items-center gap-2">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 4v16m8-8H4"
+                ></path>
+              </svg>
+              Tambah Puzzle
+            </button>
+          </Link>
+        </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-6 animate-fade-in">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900">
-                Daftar Puzzle TTS
-              </h2>
-              <p className="text-slate-500 text-sm mt-1">
-                Kelola teka-teki silang yang tersedia untuk pemain.
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {loading ? (
+            [1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-48 bg-white rounded-3xl animate-pulse border border-slate-100"
+              ></div>
+            ))
+          ) : puzzles.length === 0 ? (
+            <div className="col-span-full py-20 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200">
+              <p className="text-slate-400 font-medium">
+                Belum ada data. Klik tombol Tambah Puzzle.
               </p>
             </div>
-            <button
-              onClick={() => navigate("/admin/create")}
-              className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-200 transition-all flex items-center gap-2"
-            >
-              <span>+</span> Buat Puzzle Baru
-            </button>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead className="bg-slate-50 border-b border-slate-200">
-                  <tr>
-                    <th className="p-5 text-sm font-bold text-slate-600">
-                      Judul Puzzle
-                    </th>
-                    <th className="p-5 text-sm font-bold text-slate-600">
-                      Jumlah Kata
-                    </th>
-                    <th className="p-5 text-sm font-bold text-slate-600">
-                      Dibuat Pada
-                    </th>
-                    <th className="p-5 text-sm font-bold text-slate-600 text-right">
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {crosswords.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan="4"
-                        className="p-10 text-center text-slate-500 bg-slate-50/50 border-dashed border-2 border-slate-200 m-4 rounded-xl"
-                      >
-                        Belum ada puzzle yang dibuat. Ayo buat satu!
-                      </td>
-                    </tr>
-                  ) : (
-                    crosswords.map((cw) => (
-                      <tr
-                        key={cw.id}
-                        className="hover:bg-blue-50/50 transition-colors group"
-                      >
-                        <td className="p-5 font-bold text-slate-800">
-                          {cw.title}
-                        </td>
-                        <td className="p-5 text-slate-600">
-                          <span className="bg-slate-100 text-slate-700 py-1 px-3 rounded-full text-xs font-bold">
-                            {cw.words_data?.length || 0} Kata
-                          </span>
-                        </td>
-                        <td className="p-5 text-slate-500 text-sm">
-                          {new Date(cw.createdAt).toLocaleDateString("id-ID")}
-                        </td>
-                        <td className="p-5 text-right space-x-2">
-                          <button
-                            onClick={() => navigate(`/play/${cw.id}`)}
-                            className="text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-lg text-sm font-bold transition-colors"
-                          >
-                            Preview
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          ) : (
+            puzzles.map((puzzle) => (
+              <div
+                key={puzzle.id}
+                className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-indigo-50 transition-all duration-300 group"
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-bold text-xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    #
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-50 px-2 py-1 rounded">
+                    ID: {puzzle.id}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-indigo-600 transition-colors">
+                  {puzzle.title}
+                </h3>
+                <p className="text-slate-400 text-sm mb-6 flex items-center gap-1">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  {new Date(puzzle.createdAt).toLocaleDateString()}
+                </p>
+                <div className="flex justify-between items-center pt-4 border-t border-slate-50">
+                  <span className="text-xs font-bold text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">
+                    {puzzle.words_data?.length || 0} Kata
+                  </span>
+                  <button
+                    className="text-slate-300 hover:text-indigo-600 transition-colors"
+                    onClick={() => navigate(`/play/${puzzle.id}`)}
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
-      </div>
+      </main>
     </div>
   );
 };

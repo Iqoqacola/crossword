@@ -122,21 +122,18 @@ const CrosswordGrid = ({ gridData, wordsData }) => {
       {showSuccessModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 p-4">
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-2xl max-w-sm w-full text-center transform scale-100 animate-bounce-short border border-slate-100">
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-5 shadow-inner">
-              <span className="text-3xl md:text-4xl">🎉</span>
-            </div>
             <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 mb-2">
-              Luar Biasa!
+              Hebat!
             </h2>
             <p className="text-slate-500 mb-6 md:mb-8 leading-relaxed text-sm">
-              Kamu berhasil menyelesaikan teka-teki silang ini dengan sempurna.
+              Kamu telah menyelesaikan teka-teki silang ini.
             </p>
             <div className="flex flex-col gap-3">
               <button
                 onClick={() => setShowSuccessModal(false)}
                 className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl transition-colors text-sm md:text-base"
               >
-                Lihat Hasil Grid
+                Kembali
               </button>
               <button
                 onClick={() => navigate("/")}
@@ -153,12 +150,11 @@ const CrosswordGrid = ({ gridData, wordsData }) => {
         className="bg-slate-800 border-2 border-slate-800 shadow-lg rounded-sm w-max"
         style={{
           display: "grid",
-          /* Ukuran min di HP 32px, di PC 46px */
           gridTemplateColumns: `repeat(${cols}, minmax(32px, 46px))`,
           gap: "1px",
         }}
       >
-        {cells.map((row, r) =>
+        {cells?.map((row, r) =>
           row.map((cellValue, c) => {
             const isBlock = cellValue === null;
             const cellNum = numberMap[`${r}-${c}`];
@@ -211,17 +207,6 @@ const CrosswordGrid = ({ gridData, wordsData }) => {
           }),
         )}
       </div>
-
-      <style>{`
-                @keyframes bounce-short {
-                    0% { transform: scale(0.9); opacity: 0; }
-                    50% { transform: scale(1.05); opacity: 1; }
-                    100% { transform: scale(1); opacity: 1; }
-                }
-                .animate-bounce-short {
-                    animation: bounce-short 0.4s ease-out forwards;
-                }
-            `}</style>
     </div>
   );
 };
